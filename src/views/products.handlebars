@@ -1,0 +1,36 @@
+<script>
+  function boton(title) {
+    //fetch("/651a3ef01ae3f3bdcf273bed/product/")
+    console.log(title)
+  }
+</script>
+
+<h2>Bienvenido</h2>
+<h3 style="align-self: center;">{{datosUsuario.username}}</h3>
+<form action="http://localhost:8080/api/logout", method="post">
+  <button value="submit">Logout</button>
+</form>
+<h1 style="width: 100%;">Listado de productos</h1>
+
+{{#if response.payload}}
+    {{#each response.payload}}
+        <div id={{this._id}} style="border: 2px solid black; padding: 10px; display: flex; flex-direction: column; max-width: 320px">
+            <p>Producto: {{ this.title }}</p>
+            <p>Descripcion del producto: {{ this.description }}</p>
+            <p>Precio: {{ this.price }}</p>
+            <p>Codigo del producto: {{ this.code }}</p>
+            <p>Stock: {{ this.stock }}</p>
+            <p>Categoria: {{ this.category }}</p>
+            <p>Estado: {{ this.status }}</p>
+            <button onclick="boton({{this.description}})">Añadir al carrito</button>
+        </div>
+    {{/each}}
+{{else}}
+    <p>No existen más productos para la página seleccionada</p>
+{{/if}}
+
+{{#if response.hasNextPage}}
+    <a href={{response.nextLink}}>Siguiente página</a>
+{{else response.hasPrevPage}}
+  <a style="width: 100%;" href={{response.prevLink}}>Anterior página</a>
+{{/if}}

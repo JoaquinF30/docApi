@@ -1,0 +1,16 @@
+<h1>Listado de productos cargados</h1>
+{{#if products}}
+    {{#each products}}
+        <div style="border: 2px solid black; padding: 10px;">
+            <p>Producto: {{ this.title }}</p>
+            <p>Descripcion del producto: {{ this.description }}</p>
+            <p>Precio: {{ this.price }}</p>
+            <p>Codigo del producto: {{ this.code }}</p>
+            <p>Stock: {{ this.stock }}</p>
+            <p>Categoria: {{ this.category }}</p>
+            <p>Estado: {{ this.status }}</p>
+        </div>
+    {{/each}}
+{{else}}
+    <p>No existen elementos cargados</p>
+{{/if}}
