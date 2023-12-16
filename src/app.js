@@ -1,6 +1,6 @@
 import express from "express";
 import handlebars from "express-handlebars";
-import { __dirname } from "./utils.js";
+import { __dirname } from "./utils/utils.js";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
 import viewsRouter from "./routes/views.router.js";
@@ -15,6 +15,9 @@ import { messagesModel } from "./dao/models/messages.model.js";
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
 import config from "./config/config.js";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
+import publicRoutes from "./middleware/publicRoutes.js";
 
 const app = express();
 const httpServer = app.listen(config.port, () => console.log("Servidor arriba en el puerto 8080!"));
@@ -41,6 +44,22 @@ app.use(
       saveUninitialized: false,
     })
 );
+
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.1",
+    info: {
+      title: "E-commerce Coderhouse",
+      description: "API de la aplicacion para el curso de backend de Coderhouse"
+    }
+  },
+  apis: [
+    `${__dirname}/docs/**/*.yaml`
+  ]
+}
+
+const specs = swaggerJSDoc(swaggerOptions);
+app.use("/apidocs", publicRoutes, swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 initializePassport();
 

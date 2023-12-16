@@ -1,4 +1,4 @@
-import { fieldMissing } from "../utils.js";
+import { fieldMissing } from "../utils/utils.js";
 import ProductManager from "../dao/managers/db/productManager.js";
 
 const productsManager = new ProductManager();

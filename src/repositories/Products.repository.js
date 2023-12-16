@@ -1,5 +1,5 @@
 import { productsModel } from "../dao/models/products.model.js";
-import { fieldMissing, adaptQuery } from "../utils.js";
+import { fieldMissing, adaptQuery } from "../utils/utils.js";
 
 export default class ProductsRepository {
 

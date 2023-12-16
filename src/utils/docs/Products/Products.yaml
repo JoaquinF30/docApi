@@ -1,0 +1,108 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+basePath: /apidocs
+paths:
+  /products:
+    get:
+      tags: 
+        - Products
+      summary: Get all products
+      parameters:
+        - name: limit
+          in: query
+          description: Limit the number of products returned
+          type: integer
+        - name: sort
+          in: query
+          description: Sort order for products
+          type: string
+        - name: query
+          in: query
+          description: Query string for filtering products
+          type: string
+        - name: page
+          in: query
+          description: Page number for pagination
+          type: integer
+      responses:
+        200:
+          description: Successful response
+        404:
+          description: No products found
+
+    post:
+      tags: 
+        - Products
+      summary: Create a new product
+      parameters:
+        - name: body
+          in: body
+          description: New product data
+          required: true
+          schema:
+            type: object
+            properties:
+              // Define the properties of a new product here
+      responses:
+        200:
+          description: Product created successfully
+        500:
+          description: Error creating product
+
+  /products/{pid}:
+    get:
+      tags: 
+        - Products
+      summary: Get product by ID
+      parameters:
+        - name: pid
+          in: path
+          description: Product ID
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+        404:
+          description: Product not found
+
+    put:
+      tags: 
+        - Products
+      summary: Update product by ID
+      parameters:
+        - name: pid
+          in: path
+          description: Product ID
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: Updated product data
+          required: true
+          schema:
+            type: object 
+      responses:
+        200:
+          description: Product updated successfully
+        400:
+          description: Error updating product
+
+    delete:
+      tags: 
+        - Products
+      summary: Delete product by ID
+      parameters:
+        - name: pid
+          in: path
+          description: Product ID
+          required: true
+          type: string
+      responses:
+        200:
+          description: Product deleted successfully
+        404:
+          description: Product not found
+        500:
+          description: Error deleting product

@@ -1,0 +1,170 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+basePath: /apidocs
+paths:
+  /carts:
+    get:
+      tags: 
+        - Carts
+      summary: Get all carts
+      responses:
+        200:
+          description: Successful response
+        204:
+          description: No carts found
+
+    post:
+      tags: 
+        - Carts
+      summary: Create a new cart
+      responses:
+        200:
+          description: Cart created successfully
+
+  /carts/{cid}:
+    get:
+      tags: 
+        - Carts
+      summary: Get cart by ID
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+        404:
+          description: Cart not found
+
+    put:
+      tags: 
+        - Carts
+      summary: Update cart by ID
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: Updated cart data
+          required: true
+          schema:
+            type: object
+      responses:
+        200:
+          description: Cart updated successfully
+        404:
+          description: Cart not found
+
+    delete:
+      tags: 
+        - Carts
+      summary: Delete cart by ID
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          type: string
+      responses:
+        200:
+          description: Cart deleted successfully
+        404:
+          description: Cart not found
+
+  /carts/{cid}/products:
+    post:
+      tags: 
+        - Carts
+      summary: Insert product to cart
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          type: string
+        - name: pid
+          in: path
+          description: Product ID
+          required: true
+          type: string
+      responses:
+        200:
+          description: Product inserted successfully
+        404:
+          description: Cart not found or product not associated with cart
+
+  /carts/{cid}/products/{pid}:
+    put:
+      tags: 
+        - Carts
+      summary: Update product quantity in cart
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          type: string
+        - name: pid
+          in: path
+          description: Product ID
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: Updated product quantity
+          required: true
+          schema:
+            type: object
+            properties:
+              quantity:
+                type: integer
+                description: New quantity
+      responses:
+        200:
+          description: Product quantity updated successfully
+        404:
+          description: Cart not found or product not associated with cart
+
+    delete:
+      tags: 
+        - Carts
+      summary: Delete product from cart
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          type: string
+        - name: pid
+          in: path
+          description: Product ID
+          required: true
+          type: string
+      responses:
+        200:
+          description: Product deleted successfully
+        404:
+          description: Cart not found or product not associated with cart
+
+    /carts/{cid}/purchase:
+    post:
+      tags: 
+        - Carts
+      summary: Purchase cart
+      parameters:
+        - name: cid
+          in: path
+          description: Cart ID
+          required: true
+          type: string
+      responses:
+        200:
+          description: Purchase successful
+        404:
+          description: Cart not found or error during purchase
