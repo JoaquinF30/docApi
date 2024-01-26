@@ -11,13 +11,13 @@ router.use(express.json());
 const productManager = new ProductManager();
 const cartManager = new CartManager();
 
-router.get("/", privateRoutes, async (req, res) => {
-    const { payload } = await productManager.getAllProducts();
+// router.get("/", privateRoutes, async (req, res) => {
+//     const { payload } = await productManager.getAllProducts();
 
-    res.render("home", { 
-        products: payload,
-    })
-});
+//     res.render("home", { 
+//         products: payload,
+//     })
+// });
 
 router.get("/realtimeproducts", async (req, res) => {
     const { payload } = await productManager.getAllProducts();
@@ -31,8 +31,8 @@ router.get("/chat", async (req, res) => {
     res.render("chat")
 });
 
-router.get("/products",
-//  privateRoutes,
+router.get("/",
+ privateRoutes,
   async (req, res) => {
     const { page } = req.query;
     const { username, email } = req.session;

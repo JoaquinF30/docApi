@@ -18,6 +18,7 @@ import config from "./config/config.js";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
 import publicRoutes from "./middleware/publicRoutes.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 const httpServer = app.listen(config.port, () => console.log("Servidor arriba en el puerto 8080!"));
@@ -28,6 +29,7 @@ app.engine('handlebars', handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 app.use(express.static(__dirname + "/public"));
+app.use(cookieParser())
 
 app.use((req, res, next) => {
     req.context = { socketServer };

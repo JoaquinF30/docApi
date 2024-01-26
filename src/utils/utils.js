@@ -4,10 +4,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const __filename = fileURLToPath(import.meta.url);
+export const __dirname = dirname(__filename).replace(/\\utils$/, '');
 
-const PRIVATE_KEY = "llavePrivada"
-
-export const __dirname = dirname(__filename);
+const PRIVATE_KEY = "llavePrivada";
 
 export const fieldMissing = (product) => {
     const { title, description, price, thumbnails, code, stock, category, status } = product;

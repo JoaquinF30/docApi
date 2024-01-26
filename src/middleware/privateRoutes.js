@@ -1,5 +1,5 @@
 const privateRoutes = (req, res, next) => {
-    if(!req.user) {
+    if(!req.session.user) {
         return res.redirect("/login")
     }
     next();

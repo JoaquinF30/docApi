@@ -43,39 +43,39 @@ const initializePassport = () => {
       done(null, user);
   });
 
-  passport.use(
-    'jwt',
-    new JWTStrategy(
-      {
-        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-        secretOrKey: 'secreto',
-      },
-      async (jwt_payload, done) => {
-        try {
-          return done(null, jwt_payload);
-        } catch (error) {
-          return done(error);
-        }
-      }
-    )
-  );
-
-  // passport.use('login', new LocalStrategy({ usernameField: 'email',  }, async (username, password, done) => {
-  //   try {
-  //       const user = await userModel.findOne({ email: username }).lean();
-  //       if (!user) {
-  //         return done(null, false);
+  // passport.use(
+  //   'jwt',
+  //   new JWTStrategy(
+  //     {
+  //       jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+  //       secretOrKey: 'secreto',
+  //     },
+  //     async (jwt_payload, done) => {
+  //       try {
+  //         return done(null, jwt_payload);
+  //       } catch (error) {
+  //         return done(error);
   //       }
-
-  //       if (!isValidPassword(user, password)) {
-  //         return done(null, false);
-  //       }
-
-  //       return done(null, user);
-  //   } catch (error) {
-  //       return done(error);
-  //   }})
+  //     }
+  //   )
   // );
+
+  passport.use('login', new LocalStrategy({ usernameField: 'email',  }, async (username, password, done) => {
+    try {
+        const user = await userModel.findOne({ email: username }).lean();
+        if (!user) {
+          return done(null, false);
+        }
+
+        if (!isValidPassword(user, password)) {
+          return done(null, false);
+        }
+
+        return done(null, user);
+    } catch (error) {
+        return done(error);
+    }})
+  );
 
   passport.use(
     'github',

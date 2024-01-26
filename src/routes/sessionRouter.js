@@ -33,7 +33,7 @@ router.post('/register', passport.authenticate('register',
 
 
 router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, username } = req.body;
   const user = await userModel.findOne({ email });
 
   if (!user) {
@@ -47,9 +47,18 @@ router.post('/login', async (req, res) => {
   const userId = user._id;
   const token = jwt.sign({ exp: Math.floor(Date.now() / 1000) - 30, userId }, 'secreto');
 
+  console.log(username, "username");
+
+  req.session.user = {
+    username,
+    email,
+    rol: req.user.password === "adminCod3r123" ? "admin" : "usuario",
+  };
+
   res.cookie('token', token, {
       maxAge: 10000,
       httpOnly: true,
+      path: "/"
     })
     .redirect('/');
 });
@@ -67,7 +76,7 @@ router.get(
 );
 
 router.post('/logout', async (req, res) => {
-  console.log(req.session.cookie);
+  res.clearCookie("token");
   req.session.destroy(err => {
     if(!err) {
       res.redirect("/login")
