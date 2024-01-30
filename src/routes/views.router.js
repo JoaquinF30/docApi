@@ -11,13 +11,9 @@ router.use(express.json());
 const productManager = new ProductManager();
 const cartManager = new CartManager();
 
-// router.get("/", privateRoutes, async (req, res) => {
-//     const { payload } = await productManager.getAllProducts();
-
-//     res.render("home", { 
-//         products: payload,
-//     })
-// });
+router.get("/", privateRoutes, async (req, res) => {
+    res.redirect("/products")
+});
 
 router.get("/realtimeproducts", async (req, res) => {
     const { payload } = await productManager.getAllProducts();
@@ -31,11 +27,11 @@ router.get("/chat", async (req, res) => {
     res.render("chat")
 });
 
-router.get("/",
+router.get("/products",
  privateRoutes,
   async (req, res) => {
     const { page } = req.query;
-    const { username, email } = req.session;
+    const { username, email } = req.user;
 
     try {
         const response = await productManager.getAllProducts(undefined, undefined, undefined, page);
@@ -58,16 +54,19 @@ router.get("/",
     }
 });
 
-router.get("/carts/:cid", async (req, res) => {
-  try {
-      const cart = await cartManager.getCartProductsById(req.params.cid);
-      if (!cart) {
-          return res.status(404).send({ status: "error", error: "El carrito no existe en la base de datos" })
-      }
-      return res.render("cart", cart);
-  } catch (error) {
-      console.log(error);
-  }
+router.get("/carts/:cid", 
+    privateRoutes,
+    async (req, res) => {
+        try {
+            const cart = await cartManager.getCartProductsById(req.params.cid);
+            if (!cart) {
+                return res.status(404).send({ status: "error", error: "El carrito no existe en la base de datos" })
+            }
+
+            return res.render("cart", cart);
+        } catch (error) {
+            console.log(error);
+        }
 });
 
 router.get('/login', publicRoutes, (req, res) => {

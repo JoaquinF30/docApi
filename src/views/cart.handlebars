@@ -7,5 +7,6 @@
         <p>Stock: {{ this.product.stock }}</p>
         <p>Categoria: {{ this.product.category }}</p>
         <p>Estado: {{ this.product.status }}</p>
+        <button onclick="boton('{{this._id}}')">Eliminar producto del carrito</button>
     </div>
 {{/each}}

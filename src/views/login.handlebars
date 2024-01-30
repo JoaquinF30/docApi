@@ -1,3 +1,11 @@
+{{#if error}}
+<div>
+  <h1>
+    {{error}}
+  </h1>
+</div>
+{{/if}}
+
 <form action="http://localhost:8080/api/login", method="post">
   <input type="text" name="email" placeholder="Ej: usuario@hotmail.com"/>
   <input name="password" type="password"/>

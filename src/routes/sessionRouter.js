@@ -7,61 +7,49 @@ import jwt from 'jsonwebtoken';
 const router = Router();
 
 router.post('/register', passport.authenticate('register', 
-  { failureRedirect: '/failRegister' }), 
-  async (req, res) => {
-    res.redirect("/login");
-  }
+  { 
+    successRedirect: "/products", 
+    failureRedirect: "/failRegister",
+  }),
 );
 
-// router.get("/failRegister", (req, res) => {
-//   res.send({ error: "Fallo en registro" })
-// })
+router.get("/failRegister", (req, res) => {
+  res.send({ error: "Fallo en registro" })
+})
 
-// router.post('/login', passport.authenticate('login', { failureRedirect: '/login' }), async (req, res) => {
-//   if (!req.user) {
-//     return res.status(400).send({ status: "error", message: "Invalid credentials"});
+// router.post('/login', async (req, res) => {
+//   const { email, password, username } = req.body;
+//   const user = await userModel.findOne({ email });
+
+//   if (!user) {
+//     return res.status(401).send('Tu cuenta no existe');
 //   }
 
+//   if (!bcrypt.compareSync(password, user.password)) {
+//     return res.status(401).send('Contraseña equivocada');
+//   }
+
+//   const userId = user._id;
+//   const token = jwt.sign({ exp: Math.floor(Date.now() / 1000) - 30, userId }, 'secreto');
+
 //   req.session.user = {
-//     username: req.user.username,
-//     email: req.user.email,
-//     rol: req.user.password === "adminCod3r123" ? "admin" : "usuario",
+//     username: user.username,
+//     email,
+//     rol: password === "adminCod3r123" ? "admin" : "usuario",
 //   };
-  
-//   res.redirect("/products");
+
+//   res.redirect('/');
 // });
 
 
-router.post('/login', async (req, res) => {
-  const { email, password, username } = req.body;
-  const user = await userModel.findOne({ email });
-
-  if (!user) {
-    return res.status(401).send('Tu cuenta no existe');
-  }
-
-  if (!bcrypt.compareSync(password, user.password)) {
-    return res.status(401).send('Contraseña equivocada');
-  }
-
-  const userId = user._id;
-  const token = jwt.sign({ exp: Math.floor(Date.now() / 1000) - 30, userId }, 'secreto');
-
-  console.log(username, "username");
-
-  req.session.user = {
-    username,
-    email,
-    rol: req.user.password === "adminCod3r123" ? "admin" : "usuario",
-  };
-
-  res.cookie('token', token, {
-      maxAge: 10000,
-      httpOnly: true,
-      path: "/"
-    })
-    .redirect('/');
-});
+router.post('/login', passport.authenticate(
+  "login",
+  { 
+    successRedirect: "/products", 
+    failureRedirect: "/login",
+    failureFlash: true,
+  })
+);
 
 router.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
 
@@ -69,8 +57,8 @@ router.get(
   '/githubcallback',
   passport.authenticate('github', { failureRedirect: '/login' }),
   (req, res) => {
-    req.session.user = req.user;
-    req.session.isLogged = true;
+    req.user = req.user;
+    req.isLogged = true;
     res.redirect('/products');
   }
 );

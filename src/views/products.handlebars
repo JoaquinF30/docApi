@@ -1,10 +1,3 @@
-<script>
-  function boton(title) {
-    //fetch("/651a3ef01ae3f3bdcf273bed/product/")
-    console.log(title)
-  }
-</script>
-
 <h2>Bienvenido</h2>
 <h3 style="align-self: center;">{{datosUsuario.username}}</h3>
 <form action="http://localhost:8080/api/logout", method="post">
@@ -22,7 +15,7 @@
             <p>Stock: {{ this.stock }}</p>
             <p>Categoria: {{ this.category }}</p>
             <p>Estado: {{ this.status }}</p>
-            <button onclick="boton({{this.description}})">Añadir al carrito</button>
+            <button onclick="boton('{{this._id}}')">Añadir al carrito</button>
         </div>
     {{/each}}
 {{else}}
@@ -34,3 +27,21 @@
 {{else response.hasPrevPage}}
   <a style="width: 100%;" href={{response.prevLink}}>Anterior página</a>
 {{/if}}
+
+<script>
+  function boton(productId) {
+    // TODO
+  }
+
+  var addToCartButtons = document.querySelectorAll(".addToCartButton");
+
+  addToCartButtons.forEach(function(button) {
+    button.addEventListener("click", function(event) {
+      event.preventDefault();
+      
+      var productId = this.getAttribute("data-product-id");
+
+      boton(productId);
+    });
+  });
+</script>

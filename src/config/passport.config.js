@@ -26,7 +26,12 @@ const initializePassport = () => {
             password: createHash(password),
           });
 
-          return done(null, user);
+          const dtoUser = {
+            ...user,
+            rol: password === "adminCod3r123" ? "admin" : "usuario"
+          }
+
+          return done(null, dtoUser);
         } catch (error) {
           return done("Error al obtener el usuario: " + error)
         }
@@ -43,35 +48,24 @@ const initializePassport = () => {
       done(null, user);
   });
 
-  // passport.use(
-  //   'jwt',
-  //   new JWTStrategy(
-  //     {
-  //       jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-  //       secretOrKey: 'secreto',
-  //     },
-  //     async (jwt_payload, done) => {
-  //       try {
-  //         return done(null, jwt_payload);
-  //       } catch (error) {
-  //         return done(error);
-  //       }
-  //     }
-  //   )
-  // );
-
-  passport.use('login', new LocalStrategy({ usernameField: 'email',  }, async (username, password, done) => {
+  passport.use('login', new LocalStrategy({ usernameField: 'email' }, async (username, password, done) => {
     try {
         const user = await userModel.findOne({ email: username }).lean();
+
         if (!user) {
-          return done(null, false);
+          return done(null, false, { message: 'Tu cuenta no existe' });
         }
-
+        
         if (!isValidPassword(user, password)) {
-          return done(null, false);
+          return done(null, false, { message: 'Contraseña equivocada' });
         }
 
-        return done(null, user);
+        const dtoUser = {
+          ...user,
+          rol: password === "adminCod3r123" ? "admin" : "usuario"
+        }
+
+        return done(null, dtoUser);
     } catch (error) {
         return done(error);
     }})

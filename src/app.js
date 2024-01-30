@@ -19,6 +19,7 @@ import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
 import publicRoutes from "./middleware/publicRoutes.js";
 import cookieParser from "cookie-parser";
+import flash from "express-flash";
 
 const app = express();
 const httpServer = app.listen(config.port, () => console.log("Servidor arriba en el puerto 8080!"));
@@ -29,23 +30,26 @@ app.engine('handlebars', handlebars.engine());
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 app.use(express.static(__dirname + "/public"));
-app.use(cookieParser())
+app.use(cookieParser());
+
+app.use(flash());
+app.use(
+  session({
+    store: MongoStore.create({
+      mongoUrl: config.mongoUrl,
+    }),
+    secret: 'sdfv8ikm90sedfj8934timo',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use((req, res, next) => {
     req.context = { socketServer };
+    res.locals.error = req.flash('error');
+    res.locals.user = req.user || null;
     next();
 });
-
-app.use(
-    session({
-      store: MongoStore.create({
-        mongoUrl: config.mongoUrl,
-      }),
-      secret: 'sdfv8ikm90sedfj8934timo',
-      resave: false,
-      saveUninitialized: false,
-    })
-);
 
 const swaggerOptions = {
   definition: {
